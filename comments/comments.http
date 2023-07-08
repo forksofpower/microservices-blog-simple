@@ -1,0 +1,15 @@
+@postId = bebcbb4e
+
+### list all comments
+GET http://localhost:4001/comments HTTP/1.1
+
+### list all comments for a post
+GET http://localhost:4001/posts/{{postId}}/comments HTTP/1.1
+
+### create a new comment for a post
+POST http://localhost:4001/posts/{{postId}}/comments HTTP/1.1
+Content-Type: application/json
+
+{
+    "content": "I totally disagree. You are a failure."
+}

@@ -1,0 +1,43 @@
+@baseUrl = http://localhost
+@postsApi = {{baseUrl}}:4000
+@commentsApi = {{baseUrl}}:4001
+@queryApi = {{baseUrl}}:4002
+
+###
+# 1. create a new post
+# @name post
+POST {{postsApi}}/posts HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Test Post {{$guid}}"
+}
+
+
+###
+@postId = {{post.response.body.id}}
+
+# 2. Add a comment to the post
+# @prompt message
+# @name comment
+POST {{commentsApi}}/posts/{{postId}}/comments HTTP/1.1
+Content-Type: application/json
+
+{
+  "content": "{{message}}"
+}
+
+###
+# 3. List all Posts and comments
+GET {{queryApi}}/posts HTTP/1.1
+
+###
+# 4. Delete Last Comment
+@commentId = {{comment.response.body.id}}
+@commentPostId = {{comment.response.body.postId}}
+DELETE {{commentsApi}}/posts/{{commentPostId}}/comments/{{commentId}} HTTP/1.1
+
+###
+# 5. Delete a Post
+# @prompt postId
+DELETE {{postsApi}}/posts/{{postId}} HTTP/1.1

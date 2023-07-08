@@ -1,0 +1,24 @@
+### create a new event with post data
+POST http://localhost:4005/events HTTP/1.1
+Content-Type: application/json
+
+{
+    "type": "PostCreated",
+    "data": {
+        "id": "test1234",
+        "title": "Post Content"
+    }
+}
+
+### create a new event with comment data
+POST http://localhost:4005/events HTTP/1.1
+Content-Type: application/json
+
+{
+    "type": "CommentCreated",
+    "data": {
+        "id": "test124",
+        "postId": "test123",
+        "content": "Comment content"
+    }
+}
