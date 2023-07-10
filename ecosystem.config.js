@@ -3,7 +3,7 @@ const libs = [
   // 'client',
   "comments",
   "event-bus",
-  // 'moderation',
+  "moderation",
   "query",
 ];
 
