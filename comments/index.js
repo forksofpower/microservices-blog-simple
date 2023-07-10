@@ -96,6 +96,7 @@ function emitEvent(type, data) {
 function handlePostDeleted(data) {
   delete commentsByPostId[data.id];
 }
+
 /**
  * @param {Comment} commentEvent
  **/
