@@ -1,11 +1,4 @@
-const libs = [
-  "posts",
-  // 'client',
-  "comments",
-  "event-bus",
-  "moderation",
-  "query",
-];
+const libs = ["posts", "comments", "event-bus", "moderation", "query"];
 
 module.exports = {
   apps: libs.map((lib) => ({
@@ -14,12 +7,3 @@ module.exports = {
     watch: true,
   })),
 };
-
-// module.exports = {
-//   apps: [
-//     {
-//       name: "posts",
-//       script: "./posts/index.js",
-//     },
-//   ],
-// };
