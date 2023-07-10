@@ -6,5 +6,6 @@
   },
   "dependencies": {
     "pm2": "^5.3.0"
-  }
+  },
+  "packageManager": "yarn@3.6.1"
 }
