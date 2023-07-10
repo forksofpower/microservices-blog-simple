@@ -9,10 +9,11 @@ app.use(express.json());
 app.post("/events", (req, res) => {
   const event = req.body;
 
-  console.log(`Re-Emitting Event: ${event.type}`, event.data);
+  console.log(`Re-Emitting Event: ${event.type}`);
   emitEventToService(Services.Posts, event);
   emitEventToService(Services.Comments, event);
   emitEventToService(Services.Query, event);
+  emitEventToService(Services.Moderation, event);
 
   res.send({ status: "OK" });
 });

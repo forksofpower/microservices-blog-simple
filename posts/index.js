@@ -40,7 +40,7 @@ app.post("/events", (req, res) => {
   // console.info(`Recieved Event: ${type}\n`, data);
   switch (type) {
     default:
-      console.warn(`Ignored Event: ${type}`);
+    // console.warn(`Ignored Event: ${type}`);
   }
   res.send({ status: "OK" });
 });
@@ -50,6 +50,7 @@ app.listen(Services.Posts, () => {
 });
 
 function emitEvent(type, data) {
+  console.debug(`Emitting Event: `, type);
   return axios.post(`http://localhost:${Services.EventBus}/events`, {
     type,
     data,

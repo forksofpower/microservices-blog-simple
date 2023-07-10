@@ -33,6 +33,9 @@ app.post("/events", (req, res) => {
     case "CommentCreated":
       handleCommentCreated(data);
       break;
+    case "CommentUpdated":
+      handleCommentUpdated(data);
+      break;
     case "CommentDeleted":
       handleCommentDeleted(data);
       break;
@@ -43,7 +46,7 @@ app.post("/events", (req, res) => {
       handlePostDeleted(data);
       break;
     default:
-      console.warn(`Ignored Event: ${type}`);
+    // console.warn(`Ignored Event: ${type}`);
   }
   res.send({ status: "OK" });
 });
@@ -75,6 +78,39 @@ function handlePostDeleted(post) {
 /**
  * @param {Comment} comment
  */
+function handleCommentCreated(comment) {
+  /** @type Post*/
+  const post = posts[comment.postId];
+
+  if (post) {
+    if (!post.comments) post.comments = [];
+    post.comments.push({
+      id: comment.id,
+      content: comment.content,
+      status: comment.status,
+    });
+    posts[comment.postId] = post;
+    console.debug(`Comment Created <${comment.id}> for Post <${post.id}>`);
+  }
+}
+
+/**
+ * @param {Comment} comment
+ **/
+async function handleCommentUpdated(comment) {
+  /** @type Post */
+  const post = posts[comment.postId];
+  const commentIndex = post.comments.findIndex((x) => x.id === comment.id);
+  post.comments[commentIndex] = comment;
+
+  posts[comment.postId] = post;
+
+  console.debug(`Comment Updated <${comment.id}> for Post <${post.id}>`);
+}
+
+/**
+ * @param {Comment} comment
+ */
 function handleCommentDeleted(comment) {
   const { postId, id: commentId } = comment;
   const post = posts[postId];
@@ -87,29 +123,12 @@ function handleCommentDeleted(comment) {
 }
 
 /**
- * @param {Comment} comment
- */
-function handleCommentCreated(comment) {
-  /** @type Post*/
-  const post = posts[comment.postId];
-
-  if (post) {
-    if (!post.comments) post.comments = [];
-    post.comments.push({
-      id: comment.id,
-      content: comment.content,
-    });
-    posts[comment.postId] = post;
-    console.debug(`Comment Created <${comment.id}> for Post <${post.id}>`);
-  }
-}
-
-/**
  * @typedef Comment
  * @type {object}
  * @property {string} id - the comment id
  * @property {string} content - the comment content
  * @property {string} [postId] - the comment post id
+ * @property {string} status
  *
  * @typedef Post
  * @type {object}
