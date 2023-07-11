@@ -1,9 +1,9 @@
-const libs = ["posts", "comments", "event-bus", "moderation", "query"];
+const packages = ["posts", "comments", "event-bus", "moderation", "query"];
 
 module.exports = {
-  apps: libs.map((lib) => ({
-    name: lib,
-    script: `./${lib}/index.js`,
+  apps: packages.map((package) => ({
+    name: package,
+    script: `./packages/${package}/index.js`,
     watch: true,
   })),
 };
