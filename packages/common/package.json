@@ -2,6 +2,9 @@
   "name": "@microservice-blog/common",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
   "devDependencies": {
     "typescript": "^5.1.6"
   }

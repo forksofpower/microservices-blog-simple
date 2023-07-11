@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "deps:install": "for d in ./*/ ; do (cd \"$d\" && npm install); done",
+    "build": "yarn workspaces foreach run build",
     "start": "pm2 start ecosystem.config.js",
     "stop": "pm2 stop ecosystem.config.js"
   },
