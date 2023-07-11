@@ -6,9 +6,16 @@ const app = express();
 
 app.use(express.json());
 
+const events = [];
+
+app.get("/events", (req, res) => {
+  res.send(events);
+});
+
 app.post("/events", (req, res) => {
   const event = req.body;
 
+  events.push(event);
   // console.debug(`Re-Emitting Event: ${event.type}`);
   emitEventToService(Services.Posts, event);
   emitEventToService(Services.Comments, event);
