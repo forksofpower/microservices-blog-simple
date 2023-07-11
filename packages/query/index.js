@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 // const Services = require("../common/services");
 const { Services } = require("@microservice-blog/common");
+const axios = require("axios");
+const axiosRetry = require("axios-retry");
 
 const app = express();
 app.use(express.json());
@@ -28,8 +30,35 @@ app.get("/posts", (req, res) => {
 
 app.post("/events", (req, res) => {
   const { type, data } = req.body;
+  handleEvent(type, data);
+  res.send({ status: "OK" });
+});
 
-  // console.info(`Recieved Event: ${type}\n`, data);
+app.listen(Services.Query, async () => {
+  console.info(`listening on port ${Services.Query}`);
+  // add retry logic only for the event sync requests
+  // axiosRetry(eventService, {
+  //   retries: 3,
+  //   retryDelay: axiosRetry.exponentialDelay,
+  // });
+  try {
+    console.log("Event Sync Started");
+    const res = await axios.get("http://localhost:4005/events", {
+      axiosRetry: { retries: 3 },
+    });
+    for (let { type, data } of res.data) {
+      handleEvent(type, data);
+    }
+    console.log(JSON.stringify(posts, null, 2));
+    console.log(`Event Sync Complete`);
+  } catch (error) {
+    console.error("Error syncing events from event-bus service");
+    throw new Error(error);
+  }
+});
+
+// Event Handlers
+function handleEvent(type, data) {
   switch (type) {
     case "CommentCreated":
       handleCommentCreated(data);
@@ -49,14 +78,7 @@ app.post("/events", (req, res) => {
     default:
     // console.warn(`Ignored Event: ${type}`);
   }
-  res.send({ status: "OK" });
-});
-
-app.listen(Services.Query, () => {
-  console.info(`listening on port ${Services.Query}`);
-});
-
-// Event Handlers
+}
 
 /**
  * @param {Post} post
