@@ -1,3 +1,26 @@
+class Service {
+  constructor(
+    public name: string,
+    public port: number,
+    public hostname: string
+  ) {}
+  get url() {
+    const host =
+      process.env.NODE_ENV === "production" ? this.hostname : "localhost";
+    return `http://${host}:${this.port}`;
+  }
+}
+
+export function ServiceList(
+  services: Array<{ name: string; port: number; hostname: string }>
+): Record<string, Service> {
+  return services.reduce((acc, { name, port, hostname }) => {
+    const capitalized = name[0].toUpperCase() + name.substring(1);
+    acc[capitalized] = new Service(name, port, hostname);
+    return acc;
+  }, {} as Record<string, Service>);
+}
+
 export enum Services {
   Client = 3000,
   Posts = 4000,

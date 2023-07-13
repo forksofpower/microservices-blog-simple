@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  event-bus:
+    container_name: event-bus
+    image: forksofpower/blog-event-bus
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=event-bus
+    ports:
+      - '4005:4005'
+  posts:
+    container_name: posts
+    image: forksofpower/blog-posts
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=posts
+    ports:
+      - '4000:4000'
+  comments:
+    container_name: comments
+    image: forksofpower/blog-comments
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=comments
+    ports:
+      - '4001:4001'
+  query:
+    container_name: query
+    image: forksofpower/blog-query
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=query
+    ports:
+      - '4002:4002'
+  moderation:
+    container_name: moderation
+    image: forksofpower/blog-moderation
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONTEXT=moderation
+    ports:
+      - '4003:4003'
