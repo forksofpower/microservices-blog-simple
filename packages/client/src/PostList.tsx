@@ -11,7 +11,7 @@ export const PostList = () => {
 
   const deletePost = async (postId: string) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
-      await axios.delete(`http://my-micro-posts.com/posts/${postId}`);
+      await axios.delete(`http://my-micro-posts.com/posts/${postId}/delete`);
     }
   };
 

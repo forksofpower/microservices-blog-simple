@@ -9,7 +9,7 @@ const CommentCreate: React.FC<{ postId: Post["id"] }> = ({ postId }) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await axios.post(`http://my-micro-posts.com/posts/${postId}/comments`, {
+    await axios.post(`http://my-micro-posts.com/posts/${postId}/comments/create`, {
       content,
     });
     setContent("");

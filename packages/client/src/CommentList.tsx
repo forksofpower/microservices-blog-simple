@@ -12,7 +12,7 @@ const CommentList: React.FC<Props> = ({ postId, comments = [] }) => {
   const deleteComment = async (commentId: string) => {
     if (window.confirm("Are you sure you want to delete this comment?")) {
       await axios.delete(
-        `http://my-micro-posts.com/posts/${postId}/comments/${commentId}`,
+        `http://my-micro-posts.com/posts/${postId}/comments/${commentId}/delete`,
       );
     }
   };
