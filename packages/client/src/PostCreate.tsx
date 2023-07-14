@@ -8,7 +8,7 @@ const PostCreate = () => {
     event.preventDefault();
 
     try {
-      await axios.post("http://localhost:4000/posts", { title });
+      await axios.post("http://my-micro-posts.com/posts", { title });
       setTitle("");
     } catch (e) {
       console.error(e);

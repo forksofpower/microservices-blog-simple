@@ -5,16 +5,18 @@ import CommentList from "./CommentList";
 import { Post, Comment } from "@microservice-blog/common";
 
 export const PostList = () => {
-  const [posts, setPosts] = useState<Record<string, Post & { comments: Comment[]}>>({});
+  const [posts, setPosts] = useState<
+    Record<string, Post & { comments: Comment[] }>
+  >({});
 
   const deletePost = async (postId: string) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
-      await axios.delete(`http://localhost:4000/posts/${postId}`);
+      await axios.delete(`http://my-micro-posts.com/posts/${postId}`);
     }
   };
 
   const fetchPosts = async () => {
-    const res = await axios.get("http://localhost:4002/posts");
+    const res = await axios.get("http://my-micro-posts.com/posts");
     console.log(res.data);
     setPosts(res.data);
   };

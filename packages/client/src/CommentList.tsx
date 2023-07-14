@@ -12,20 +12,22 @@ const CommentList: React.FC<Props> = ({ postId, comments = [] }) => {
   const deleteComment = async (commentId: string) => {
     if (window.confirm("Are you sure you want to delete this comment?")) {
       await axios.delete(
-        `http://localhost:4001/posts/${postId}/comments/${commentId}`,
+        `http://my-micro-posts.com/posts/${postId}/comments/${commentId}`,
       );
     }
   };
 
   const renderedComments = comments.map((comment) => {
-    return comment.status !== "rejected" && (
-      <li key={comment.id}>
-        {comment.content}{" "}
-        <TiDeleteOutline
-          style={{ cursor: "pointer", color: "red" }}
-          onClick={() => deleteComment(comment.id)}
-        />
-      </li>
+    return (
+      comment.status !== "rejected" && (
+        <li key={comment.id}>
+          {comment.content}{" "}
+          <TiDeleteOutline
+            style={{ cursor: "pointer", color: "red" }}
+            onClick={() => deleteComment(comment.id)}
+          />
+        </li>
+      )
     );
   });
   return <ul>{renderedComments}</ul>;

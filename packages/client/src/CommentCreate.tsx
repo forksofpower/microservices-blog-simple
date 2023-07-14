@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from "react";
 import axios from "axios";
-import { getServiceUrl } from "./utils";
-import { Services, Post } from "@microservice-blog/common";
+// import { getServiceUrl } from "./utils";
+import { Post } from "@microservice-blog/common";
 
 const CommentCreate: React.FC<{ postId: Post["id"] }> = ({ postId }) => {
   const [content, setContent] = useState("");
@@ -9,12 +9,9 @@ const CommentCreate: React.FC<{ postId: Post["id"] }> = ({ postId }) => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    await axios.post(
-      `${getServiceUrl(Services.Comments)}/posts/${postId}/comments`,
-      {
-        content,
-      }
-    );
+    await axios.post(`http://my-micro-posts.com/posts/${postId}/comments`, {
+      content,
+    });
     setContent("");
   };
 
