@@ -1,33 +1,33 @@
 import { ServiceList } from "../services";
 
-export default ServiceList([
+export const services = ServiceList([
   {
-    name: "client",
+    name: "Client",
     port: 3000,
     hostname: "client-srv",
   },
   {
-    name: "posts",
+    name: "Posts",
     port: 4000,
     hostname: "posts-srv",
   },
   {
-    name: "comments",
+    name: "Comments",
     port: 4001,
     hostname: "comments-srv",
   },
   {
-    name: "query",
+    name: "Query",
     port: 4002,
     hostname: "query-srv",
   },
   {
-    name: "moderation",
+    name: "Moderation",
     port: 4003,
     hostname: "moderation-srv",
   },
   {
-    name: "event-bus",
+    name: "EventBus",
     port: 4005,
     hostname: "event-bus-srv",
   },
