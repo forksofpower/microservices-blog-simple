@@ -1,6 +1,9 @@
 const express = require("express");
 const axios = require("axios");
-const { Services, services } = require("@microservice-blog/common");
+const {
+  Services,
+  servs: { services },
+} = require("@microservice-blog/common");
 
 const app = express();
 app.use(express.json());

@@ -19,16 +19,21 @@ app.post("/events", (req, res) => {
   const event = req.body;
 
   events.push(event);
-  // console.debug(`Re-Emitting Event: ${event.type}`);
-  emitEventToService(services.Posts.url, event);
-  // emitEventToService(services.Comments.url, event);
-  emitEventToService(services.Query.url, event);
-  // emitEventToService(services.Moderation.url, event);
+  console.debug(`Re-Emitting Event: \n${event.type}`, event);
+  try {
+    emitEventToService(services.Posts.url, event);
+    emitEventToService(services.Comments.url, event);
+    emitEventToService(services.Query.url, event);
+    emitEventToService(services.Moderation.url, event);
+  } catch (error) {
+    console.error(error);
+  }
 
   res.send({ status: "OK" });
 });
 
 app.listen(Services.EventBus, () => {
+  console.log(services);
   console.info(`listening on port ${Services.EventBus}`);
 });
 

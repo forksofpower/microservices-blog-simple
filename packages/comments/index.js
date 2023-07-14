@@ -4,7 +4,10 @@ const cors = require("cors");
 const axios = require("axios");
 
 // Common
-const { Services, services } = require("@microservice-blog/common");
+const {
+  Services,
+  servs: { services },
+} = require("@microservice-blog/common");
 
 const app = express();
 app.use(express.json());
