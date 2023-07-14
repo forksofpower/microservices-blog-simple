@@ -4,18 +4,8 @@ const cors = require("cors");
 const axios = require("axios");
 
 // Common
-const { Services } = require("@microservice-blog/common");
+const { Services, services } = require("@microservice-blog/common");
 
-/**
- * Comments Service
- *
- * Subscribes To:
- * - PostDeleted
- * Publishes:
- * - CommentCreated
- * - CommentUpdated
- * - CommentDeleted
- */
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -81,13 +71,13 @@ app.post("/events", (req, res) => {
   res.send({ status: "OK" });
 });
 
-app.listen(Services.Comments, () => {
-  console.info(`Listening on port ${Services.Comments}`);
+app.listen(services.Comments.port, () => {
+  console.info(`Listening on port ${services.Comments.port}`);
 });
 
 function emitEvent(type, data) {
   console.debug(`Emitting Event: `, type);
-  return axios.post(`http://localhost:${Services.EventBus}/events`, {
+  return axios.post(`${services.EventBus.url}/events`, {
     type,
     data,
   });
@@ -97,9 +87,6 @@ function handlePostDeleted(data) {
   delete commentsByPostId[data.id];
 }
 
-/**
- * @param {Comment} commentEvent
- **/
 async function handleCommentModerated(commentEvent) {
   const comments = commentsByPostId[commentEvent.postId];
   const commentIndex = comments.findIndex((x) => x.id === commentEvent.id);
@@ -109,18 +96,3 @@ async function handleCommentModerated(commentEvent) {
 
   await emitEvent("CommentUpdated", comments[commentIndex]);
 }
-
-/**
- * @typedef Comment
- * @type {object}
- * @property {string} id - the comment id
- * @property {string} content - the comment content
- * @property {string} [postId] - the comment post id
- * @property {string} status - the moderation status
- *
- * @typedef Post
- * @type {object}
- * @property {string} id - the post id
- * @property {string} title - the post title
- * @property {Comment[]} [comments] - the array of post comments
- */

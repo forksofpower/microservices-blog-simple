@@ -1,6 +1,6 @@
 const express = require("express");
 const axios = require("axios");
-const { Services } = require("@microservice-blog/common");
+const { Services, services } = require("@microservice-blog/common");
 
 const app = express();
 app.use(express.json());
@@ -28,7 +28,7 @@ app.listen(Services.Moderation, () => {
 // Helpers
 function emitEvent(type, data) {
   console.debug(`Emitting Event: `, type);
-  return axios.post(`http://localhost:${Services.EventBus}/events`, {
+  return axios.post(`${services.EventBus.url}/events`, {
     type,
     data,
   });

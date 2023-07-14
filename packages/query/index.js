@@ -1,23 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 // const Services = require("../common/services");
-const { Services } = require("@microservice-blog/common");
+const {
+  Services,
+  servs: { services },
+} = require("@microservice-blog/common");
 const axios = require("axios");
 const axiosRetry = require("axios-retry");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-
-/**
- * Query Service
- *
- * Subscribes To:
- * - PostCreated
- * - PostDeleted
- * - CommentCreated
- * - CommentDeleted
- */
 
 /**
  * @type {Object.<string, Post>}
@@ -36,20 +29,16 @@ app.post("/events", (req, res) => {
 
 app.listen(Services.Query, async () => {
   console.info(`listening on port ${Services.Query}`);
-  // add retry logic only for the event sync requests
-  // axiosRetry(eventService, {
-  //   retries: 3,
-  //   retryDelay: axiosRetry.exponentialDelay,
-  // });
+  console.log(services.EventBus.url);
   try {
     console.log("Event Sync Started");
-    const res = await axios.get("http://localhost:4005/events", {
+    const res = await axios.get(`${services.EventBus.url}/events`, {
       axiosRetry: { retries: 3 },
     });
     for (let { type, data } of res.data) {
       handleEvent(type, data);
     }
-    console.log(JSON.stringify(posts, null, 2));
+    // console.log(JSON.stringify(posts, null, 2));
     console.log(`Event Sync Complete`);
   } catch (error) {
     console.error("Error syncing events from event-bus service");

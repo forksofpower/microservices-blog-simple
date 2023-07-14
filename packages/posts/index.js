@@ -2,7 +2,10 @@ const express = require("express");
 const crypto = require("crypto");
 const cors = require("cors");
 const axios = require("axios");
-const { Services } = require("@microservice-blog/common");
+const {
+  Services,
+  servs: { services },
+} = require("@microservice-blog/common");
 
 const app = express();
 app.use(express.json());
@@ -51,7 +54,7 @@ app.listen(Services.Posts, () => {
 
 function emitEvent(type, data) {
   console.debug(`Emitting Event: `, type);
-  return axios.post(`http://localhost:${Services.EventBus}/events`, {
+  return axios.post(`${services.EventBus.url}/events`, {
     type,
     data,
   });
