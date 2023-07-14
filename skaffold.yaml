@@ -1,0 +1,65 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+manifests:
+  rawYaml:
+    - ./infra/k8s/*
+deploy:
+  kubectl: {}
+build:
+  artifacts:
+    - image: forksofpower/blog-client
+      sync:
+        manual:
+          - src: ./packages/client/src/**/*.{js,jsx,ts,tsx}
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "client"
+    - image: forksofpower/blog-event-bus
+      sync:
+        manual:
+          - src: "./packages/event-bus/*.js"
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "event-bus"
+    - image: forksofpower/blog-posts
+      sync:
+        manual:
+          - src: ./packages/posts/*.js"
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "posts"
+    - image: forksofpower/blog-comments
+      sync:
+        manual:
+          - src: ./packages/comments/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "comments"
+    - image: forksofpower/blog-query
+      sync:
+        manual:
+          - src: ./packages/query/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "query"
+    - image: forksofpower/blog-moderation
+      sync:
+        manual:
+          - src: ./packages/moderation/*.js
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+        buildArgs:
+          BUILD_CONTEXT: "moderation"
+  local:
+    push: false
