@@ -4,16 +4,52 @@ metadata:
   name: ingress-srv
   annotations:
     spec.ingressClassName: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: "nginx"
   rules:
     - host: my-micro-posts.com
       http:
         paths:
-          - path: /posts
+          - path: /posts/create
             pathType: Prefix
             backend:
               service:
                 name: posts-srv
                 port:
                   number: 4000
+          - path: /posts/?(.*)/delete
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: posts-srv
+                port:
+                  number: 4000
+          - path: /posts
+            pathType: Prefix
+            backend:
+              service:
+                name: query-srv
+                port:
+                  number: 4002
+          - path: /posts/?(.*)/comments/create
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: comments-srv
+                port:
+                  number: 4001
+          - path: /posts/?(.*)/comments/delete
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: comments-srv
+                port:
+                  number: 4001
+          - path: /?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
