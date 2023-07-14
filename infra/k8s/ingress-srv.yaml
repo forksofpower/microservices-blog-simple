@@ -39,7 +39,7 @@ spec:
                 name: comments-srv
                 port:
                   number: 4001
-          - path: /posts/?(.*)/comments/delete
+          - path: /posts/?(.*)/comments/?(.*)/delete
             pathType: ImplementationSpecific
             backend:
               service:
