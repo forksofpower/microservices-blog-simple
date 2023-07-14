@@ -1,6 +1,9 @@
 FROM node:alpine as build
 ARG BUILD_CONTEXT
 
+ENV CI=true
+ENV WSD_SOCKET_PORT=0
+
 WORKDIR /base
 
 # install dependencies
@@ -9,6 +12,7 @@ COPY yarn.lock .
 COPY ./packages/common/package.json packages/common/
 COPY ./packages/$BUILD_CONTEXT/package.json packages/$BUILD_CONTEXT/
 RUN yarn install
+
 # build
 COPY ./packages/common packages/common
 COPY ./packages/$BUILD_CONTEXT packages/$BUILD_CONTEXT
@@ -21,5 +25,6 @@ ARG BUILD_CONTEXT
 COPY --from=build /base .
 
 WORKDIR /app/packages/$BUILD_CONTEXT
+ENV NODE_ENV production
 
 CMD ["npm", "start"]
