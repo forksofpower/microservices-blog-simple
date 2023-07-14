@@ -45,7 +45,7 @@ async function handleCommentCreated(comment) {
   console.debug(
     `Comment ${status.toUpperCase()} <${comment.id}> for Post <${
       comment.postId
-    }>`
+    }>`,
   );
 
   comment.status = status;

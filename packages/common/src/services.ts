@@ -2,7 +2,7 @@ class Service {
   constructor(
     public name: string,
     public port: number,
-    public hostname: string
+    public hostname: string,
   ) {}
   get url() {
     const host =
@@ -12,12 +12,15 @@ class Service {
 }
 
 export function ServiceList(
-  services: Array<{ name: string; port: number; hostname: string }>
+  services: Array<{ name: string; port: number; hostname: string }>,
 ): Record<string, Service> {
-  return services.reduce((acc, { name, port, hostname }) => {
-    acc[name] = new Service(name, port, hostname);
-    return acc;
-  }, {} as Record<string, Service>);
+  return services.reduce(
+    (acc, { name, port, hostname }) => {
+      acc[name] = new Service(name, port, hostname);
+      return acc;
+    },
+    {} as Record<string, Service>,
+  );
 }
 
 export enum Services {

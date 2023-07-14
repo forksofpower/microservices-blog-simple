@@ -15,15 +15,7 @@ app.use(cors());
 
 const commentsByPostId = {};
 
-app.get("/comments", (req, res) => {
-  res.send(commentsByPostId);
-});
-
-app.get("/posts/:id/comments", (req, res) => {
-  res.send(commentsByPostId[req.params.id] || []);
-});
-
-app.post("/posts/:id/comments", async (req, res) => {
+app.post("/posts/:id/comments/create", async (req, res) => {
   const postId = req.params.id;
   const { content } = req.body;
 
@@ -41,7 +33,7 @@ app.post("/posts/:id/comments", async (req, res) => {
   res.status(201).send(comment);
 });
 
-app.delete("/posts/:postId/comments/:commentId", async (req, res) => {
+app.delete("/posts/:postId/comments/:commentId/delete", async (req, res) => {
   const { postId, commentId } = req.params;
   let comments = commentsByPostId[postId];
 

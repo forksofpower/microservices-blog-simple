@@ -13,11 +13,7 @@ app.use(cors());
 
 const posts = {};
 
-app.get("/posts", (req, res) => {
-  res.send(posts);
-});
-
-app.post("/posts", async (req, res) => {
+app.post("/posts/create", async (req, res) => {
   const id = crypto.randomBytes(4).toString("hex");
   const { title } = req.body;
 
@@ -28,7 +24,7 @@ app.post("/posts", async (req, res) => {
   res.send(posts[id]);
 });
 
-app.delete("/posts/:id", async (req, res) => {
+app.delete("/posts/:id/delete", async (req, res) => {
   const { id } = req.params;
   delete posts[id];
 
