@@ -1,5 +1,5 @@
 export * from "./services";
-export * as servs from "./config/services";
+export * as config from "./config";
 
 export type PostAction = "Created" | "Deleted";
 export type PostEvent = `Post${PostAction}`;

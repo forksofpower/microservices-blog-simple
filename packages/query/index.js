@@ -1,10 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-// const Services = require("../common/services");
-const {
-  Services,
-  servs: { services },
-} = require("@microservice-blog/common");
+const { config } = require("@microservice-blog/common");
 const axios = require("axios");
 const axiosRetry = require("axios-retry");
 
@@ -12,17 +8,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-/**
- * @type {Object.<string, Post>}
- */
 const posts = {};
 
 app.get("/posts", (req, res) => {
   res.send(posts);
-});
-
-app.get("/hello", (req, res) => {
-  res.send("HELLO");
 });
 
 app.post("/events", (req, res) => {
@@ -31,22 +20,19 @@ app.post("/events", (req, res) => {
   res.send({ status: "OK" });
 });
 
-app.listen(Services.Query, async () => {
-  console.info(`listening on port ${Services.Query}`);
-  console.log(services.EventBus.url);
+app.listen(config.services.Query.port, async () => {
+  console.info(`listening on port ${config.services.Query.port}`);
   try {
     console.log("Event Sync Started");
-    const res = await axios.get(`${services.EventBus.url}/events`, {
+    const res = await axios.get(`${config.services.EventBus.url}/events`, {
       axiosRetry: { retries: 3 },
     });
     for (let { type, data } of res.data) {
       handleEvent(type, data);
     }
-    // console.log(JSON.stringify(posts, null, 2));
     console.log(`Event Sync Complete`);
   } catch (error) {
     console.error("Error syncing events from event-bus service");
-    throw new Error(error);
   }
 });
 
@@ -69,13 +55,9 @@ function handleEvent(type, data) {
       handlePostDeleted(data);
       break;
     default:
-    // console.warn(`Ignored Event: ${type}`);
   }
 }
 
-/**
- * @param {Post} post
- */
 function handlePostCreated(post) {
   if (!posts.hasOwnProperty(post.id)) {
     posts[post.id] = post;
@@ -83,19 +65,12 @@ function handlePostCreated(post) {
   }
 }
 
-/**
- * @param {Post} post
- */
 function handlePostDeleted(post) {
   const success = delete posts[post.id];
   if (success) console.debug(`Post Deleted <${post.id}>`);
 }
 
-/**
- * @param {Comment} comment
- */
 function handleCommentCreated(comment) {
-  /** @type Post*/
   const post = posts[comment.postId];
 
   if (post) {
@@ -110,11 +85,7 @@ function handleCommentCreated(comment) {
   }
 }
 
-/**
- * @param {Comment} comment
- **/
 async function handleCommentUpdated(comment) {
-  /** @type Post */
   const post = posts[comment.postId];
   const commentIndex = post.comments.findIndex((x) => x.id === comment.id);
   post.comments[commentIndex] = comment;
@@ -124,9 +95,6 @@ async function handleCommentUpdated(comment) {
   console.debug(`Comment Updated <${comment.id}> for Post <${post.id}>`);
 }
 
-/**
- * @param {Comment} comment
- */
 function handleCommentDeleted(comment) {
   const { postId, id: commentId } = comment;
   const post = posts[postId];
@@ -137,18 +105,3 @@ function handleCommentDeleted(comment) {
     console.debug(`Comment Deleted <${comment.id}> for Post <${post.id}>`);
   }
 }
-
-/**
- * @typedef Comment
- * @type {object}
- * @property {string} id - the comment id
- * @property {string} content - the comment content
- * @property {string} [postId] - the comment post id
- * @property {string} status
- *
- * @typedef Post
- * @type {object}
- * @property {string} id - the post id
- * @property {string} title - the post title
- * @property {Comment[]} [comments] - the array of post comments
- */

@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from "react";
 import axios from "axios";
-// import { getServiceUrl } from "./utils";
 import { Post } from "@microservice-blog/common";
 
 const CommentCreate: React.FC<{ postId: Post["id"] }> = ({ postId }) => {
